@@ -1,4 +1,4 @@
-# Voyager's Friend
+# Habitat Math
 
 City guides through data and metrics.
 
