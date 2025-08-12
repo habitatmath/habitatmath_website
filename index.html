@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habitat Math - Your shortcut to understanding places — fast, fun, and factual.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+        
+        /* Rain Animation */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .drop {
+            position: absolute;
+            background: linear-gradient(transparent, rgba(255,255,255,0.6), transparent);
+            width: 2px;
+            height: 120px;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Header */
+        header {
+            position: relative;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="cityGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:%23374151;stop-opacity:1" /><stop offset="100%" style="stop-color:%23111827;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="800" fill="url(%23cityGrad)"/><g fill="%23374151" opacity="0.8"><rect x="100" y="300" width="80" height="500"/><rect x="200" y="250" width="60" height="550"/><rect x="280" y="350" width="70" height="450"/><rect x="370" y="200" width="90" height="600"/><rect x="480" y="320" width="75" height="480"/><rect x="570" y="180" width="85" height="620"/><rect x="670" y="280" width="65" height="520"/><rect x="750" y="150" width="95" height="650"/><rect x="860" y="260" width="70" height="540"/><rect x="950" y="220" width="80" height="580"/></g><g fill="%23FEF3C7" opacity="0.7"><rect x="120" y="320" width="8" height="12"/><rect x="135" y="350" width="8" height="12"/><rect x="150" y="380" width="8" height="12"/><rect x="220" y="280" width="6" height="10"/><rect x="235" y="310" width="6" height="10"/><rect x="300" y="370" width="7" height="11"/><rect x="315" y="400" width="7" height="11"/><rect x="390" y="240" width="9" height="13"/><rect x="410" y="280" width="9" height="13"/><rect x="500" y="350" width="8" height="12"/><rect x="590" y="220" width="8" height="12"/><rect x="605" y="250" width="8" height="12"/><rect x="690" y="310" width="6" height="10"/><rect x="770" y="190" width="9" height="13"/><rect x="790" y="230" width="9" height="13"/><rect x="880" y="290" width="7" height="11"/><rect x="970" y="250" width="8" height="12"/></g></svg>') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+        
+        nav a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            z-index: 5;
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: -1px;
+        }
+        
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #3182ce, #2c5aa0);
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(49, 130, 206, 0.4);
+        }
+        
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 3;
+            background: white;
+        }
+        
+        .welcome-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            text-align: center;
+        }
+        
+        .welcome-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .welcome-content p {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        /* City Guides Section */
+        .city-guides {
+            padding: 60px 20px;
+            background: white;
+        }
+        
+        .city-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .city-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .city-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .city-card-header {
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        .city-card-header span {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .city-card-content {
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .city-card h3 {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .city-card p {
+            color: #718096;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .city-meta {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .city-climate {
+            background: #f7fafc;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        /* Search and Filter */
+        .city-controls {
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-family: Georgia, serif;
+            font-size: 1rem;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+        }
+        
+        /* City Guide Display */
+        .city-guide-frame {
+            display: none;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .guide-header {
+            background: #f7fafc;
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .guide-nav {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-button {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #cbd5e0;
+            transform: translateX(-5px);
+        }
+        
+        .guide-title {
+            flex: 1;
+            color: #2d3748;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .city-guide-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3182ce;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .city-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 15px;
+            }
+            
+            .city-card {
+                height: 200px;
+            }
+            
+            .city-card-header {
+                height: 100px;
+                font-size: 0.9rem;
+            }
+            
+            .city-card-content {
+                padding: 10px;
+            }
+            
+            .city-card h3 {
+                font-size: 1rem;
+            }
+            
+            .city-card p {
+                font-size: 0.8rem;
+                -webkit-line-clamp: 2;
+            }
+            
+            .search-box {
+                width: 250px;
+            }
+            
+            .city-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rain Effect -->
+    <div class="rain" id="rain"></div>
+    
+    <!-- Main Website -->
+    <div id="main-website">
+        <!-- Header -->
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#city-guides">City Guides</a></li>
+                    <li><a href="#travel-tips">Travel Tips</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hero-content">
+                <h1>Habitat Math</h1>
+                <p>Your shortcut to understanding places — fast, fun, and factual..</p>
+                <a href="#city-guides" class="cta-button">Explore Cities</a>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main>
+            <!-- Welcome Section -->
+            <section class="welcome-section" id="about">
+                <div class="welcome-content">
+                    <h2>Welcome to Habitat Math</h2>
+                    <p>We will expalin you the places through numbers and fun facts in less time. Come here for a quick glance and a clean impression of the place you like to know.</p>
+                    
+                    <p>Whether you're planning a weekend getaway, considering a move abroad, or simply satisfying your wanderlust from your armchair, we're here to be your data-driven, slightly crispy, but always reliable quick-look guide on the journey.</p>
+
+                    <p>And guess what.. there is a lot more to come in the future, stay tuned!! </p>
+                </div>
+            </section>
+            
+            <!-- City Guides Section -->
+            <section class="city-guides" id="city-guides">
+                <div class="welcome-content">
+                    <h2>Featured City Guides</h2>
+                    <p>Explore our curated collection of 50+ city guides, each packed with essential metrics, local insights, and practical wisdom for informed travelers.</p>
+                </div>
+                
+                <!-- Search and Filter Controls -->
+                <div class="city-controls">
+                    <input type="text" class="search-box" placeholder="Search cities..." id="citySearch" onkeyup="filterCities()">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterByRegion('all')">All Regions</button>
+                        <button class="filter-btn" onclick="filterByRegion('europe')">Europe</button>
+                        <button class="filter-btn" onclick="filterByRegion('asia')">Asia</button>
+                        <button class="filter-btn" onclick="filterByRegion('arctic')">Arctic</button>
+                        <button class="filter-btn" onclick="filterByRegion('mediterranean')">Mediterranean</button>
+                    </div>
+                </div>
+                
+                <div class="city-grid" id="cityGrid">
+                    <!-- City cards will be populated by JavaScript from cities.json -->
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px; color: #718096;">
+                    <p>More cities coming soon! We're continuously adding new destinations to help you explore the world.</p>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer id="contact">
+            <h3>Habitat Math</h3>
+            <p>Your shortcut to understanding places — fast, fun, and factual.</p>
+            <p style="margin-top: 20px; opacity: 0.7;">© 2024 Voyager's Friend. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- City Guide Frame -->
+    <div id="city-guide-frame" class="city-guide-frame">
+        <div class="guide-header">
+            <div class="guide-nav">
+                <button class="back-button" onclick="hideCityGuide()">← Back to City Guides</button>
+                <div class="guide-title" id="guide-title">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="loading-spinner" id="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading city guide...</p>
+        </div>
+        
+        <div class="city-guide-content" id="city-guide-content">
+            <!-- City guide content will be loaded here -->
+        </div>
+    </div>
+    
+    <script>
+        // Cities data - in a real implementation, this would come from cities.json
+        const cities = [
+            {
+                id: 'umea',
+                name: 'Umeå, Sweden',
+                description: 'Arctic intellect meets cultural fire in Sweden\'s northern powerhouse.',
+                region: 'arctic europe',
+                climate: 'Subarctic',
+                population: '130k residents',
+                emoji: '🏔️',
+                color: 'linear-gradient(135deg, #2d6e3e, #1a3a2a)',
+                file: 'cities/umea.html'
+            },
+            {
+                id: 'nice',
+                name: 'Nice, France',
+                description: 'Azure dreams meet alpine reality on the stunning Côte d\'Azur.',
+                region: 'mediterranean europe',
+                climate: 'Mediterranean',
+                population: '343k residents',
+                emoji: '🌊',
+                color: 'linear-gradient(135deg, #2b6cb0, #1a365d)',
+                file: 'cities/nice.html'
+            },
+            {
+                id: 'bergen',
+                name: 'Bergen, Norway',
+                description: 'Fjord drama meets urban charm in Norway\'s western gateway.',
+                region: 'arctic europe',
+                climate: 'Oceanic',
+                population: '284k residents',
+                emoji: '⛰️',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/bergen.html'
+            },
+            {
+                id: 'aomori',
+                name: 'Aomori, Japan',
+                description: 'Snow country meets apple dreams in Japan\'s northern frontier.',
+                region: 'asia',
+                climate: 'Continental',
+                population: '279k residents',
+                emoji: '🍎',
+                color: 'linear-gradient(135deg, #a53e3e, #742a2a)',
+                file: 'cities/aomori.html'
+            },
+            {
+                id: 'copenhagen',
+                name: 'Copenhagen, Denmark',
+                description: 'The happy capital',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '660k residents',
+                emoji: '🧀',
+                color: 'linear-gradient(135deg, #2a286c, #1e3a5f)',
+                file: 'cities/Copenhagen.html'
+            },
+            {
+                id: 'wellington',
+                name: 'Wellington, Newzealand ',
+                description: 'New Zealands Heart, Awaits',
+                region: 'Oceania',
+                climate: 'oceanic',
+                population: '215k residents',
+                emoji: '🌲',
+                color: 'linear-gradient(135deg, #01170a, #1e3a5f)',
+                file: 'cities/Wellington.html'
+            },
+            {
+                id: 'thehague',
+                name: 'The Hague, Netherlands',
+                description: 'Where the world comes to agree.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '549k residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/TheHague.html'
+            },
+            {
+                id: 'seattle',
+                name: 'Seattle, USA',
+                description: 'Hike, bike and sip.',
+                region: 'north america',
+                climate: 'oceanic',
+                population: '749k residents',
+                emoji: '🌉',
+                color: 'linear-gradient(135deg, #b5cbe0, #4e545c)',
+                file: 'cities/Seattle.html'
+            },
+            {
+                id: 'hamburg',
+                name: 'Hamburg, Germany',
+                description: 'Simply Delicious..',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '1.9M residents',
+                emoji: '⚓',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/Hamburg.html'
+            },
+            {
+                id: 'brussels',
+                name: 'Brussels, Belgium',
+                description: 'Waffle your worries away',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '1.2M residents',
+                emoji: '🍺',
+                color: 'linear-gradient(135deg, #cd872c, #563e13)',
+                file: 'cities/Brussels.html'
+            },    
+            {
+                id: 'porto',
+                name: 'Porto, Portugal',
+                description: 'Douro Delights..',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '238k residents',
+                emoji: '🌊',
+                color: 'linear-gradient(135deg, #0e347b, #1e3a5f)',
+                file: 'cities/Hamburg.html'
+            },
+            {
+                id: 'amsterdam',
+                name: 'Amsterdam, Netherlands',
+                description: 'Tulips are just the begining',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '907k residents',
+                emoji: '🌷',
+                color: 'linear-gradient(135deg, #c56674, #973057)',
+                file: 'cities/Amsterdam.html'
+            },
+            {
+                id: 'tromso',
+                name: 'Tromsø, Norway',
+                description: 'Midnight sun and Aurora Borealis',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '78k residents',
+                emoji: '🔥',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/Tromso.html'
+            },
+            {
+                id: 'oulu',
+                name: '❄️ Oulu, Finland',
+                description: 'Snow tech innovation',
+                region: 'europe',
+                climate: 'sub-arctic',
+                population: '209 residents',
+                emoji: '❄️',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/TheHague.html'
+            },
+            {
+                id: 'iceland',
+                name: '🌋 Reykjavík, Iceland',
+                description: 'Geysers and northern lights',
+                region: 'europe',
+                climate: 'sub-arctic',
+                population: '131k residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
+                file: 'cities/TheHague.html'
+            },
+            {
+                id: 'tokyo',
+                name: 'Tokyo, Japan',
+                description: 'Where tradition meets tomorrow.',
+                region: 'asia',
+                climate: 'humid subtropical',
+                 population: '14.0M residents',
+                emoji: '🗼',
+                color: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+                file: 'cities/Tokyo.html'
+            },
+            {
+                id: 'paris',
+                name: 'Paris, France',
+                description: 'City of lights and love.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '2.2M residents',
+                emoji: '🗼',
+                color: 'linear-gradient(135deg, #3498db, #2980b9)',
+                file: 'cities/Paris.html'
+            },
+            {
+                id: 'london',
+                name: 'London, UK',
+                description: 'Iconic. Inspiring. You.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '9.5M residents',
+                emoji: '🎡',
+                color: 'linear-gradient(135deg, #2c3e50, #34495e)',
+                file: 'cities/London.html'
+            },
+            {
+                id: 'berlin',
+                name: 'Berlin, Germany',
+                description: 'Walls fell, spirit rose.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '3.7M residents',
+                emoji: '🍻',
+                color: 'linear-gradient(135deg, #95a5a6, #7f8c8d)',
+                file: 'cities/Berlin.html'
+            },
+            {
+                id: 'beijing',
+                name: 'Beijing, China',
+                description: 'Ancient heart, modern pulse.',
+                region: 'asia',
+                climate: 'continental',
+                population: '21.5M residents',
+                emoji: '🐉',
+                color: 'linear-gradient(135deg, #e74c3c, #f39c12)',
+                file: 'cities/Beijing.html'
+            },
+            {
+                id: 'moscow',
+                name: 'Moscow, Russia',
+                description: 'Red Square, white winters.',
+                region: 'europe',
+                climate: 'continental',
+                population: '12.5M residents',
+                emoji: '❄️',
+                color: 'linear-gradient(135deg, #8e44ad, #9b59b6)',
+                file: 'cities/Moscow.html'
+                },
+                {
+                id: 'rome',
+                name: 'Rome, Italy',
+                description: 'Eternal city, timeless beauty.',
+                region: 'europe',
+                climate: 'mediterranean',
+                population: '2.9M residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #f39c12, #e67e22)',
+                file: 'cities/Rome.html'
+                },
+                {
+                id: 'madrid',
+                name: 'Madrid, Spain',
+                description: 'Fiesta spirit, artistic soul.',
+                region: 'europe',
+                climate: 'mediterranean',
+                population: '3.3M residents',
+                emoji: '🎭',
+                color: 'linear-gradient(135deg, #e74c3c, #d35400)',
+                file: 'cities/Madrid.html'
+                },
+                {
+                id: 'ottawa',
+                name: 'Ottawa, Canada',
+                description: 'Bilingual beauty, nature\'s neighbor.',
+                region: 'north america',
+                climate: 'continental',
+                population: '1.0M residents',
+                emoji: '🍁',
+                color: 'linear-gradient(135deg, #c0392b, #a93226)',
+                file: 'cities/Ottawa.html'
+                },
+                {
+                id: 'canberra',
+                name: 'Canberra, Australia',
+                description: 'Planned perfection, natural wonder.',
+                region: 'oceania',
+                climate: 'oceanic',
+                population: '460k residents',
+                emoji: '🦘',
+                color: 'linear-gradient(135deg, #27ae60, #16a085)',
+                file: 'cities/Canberra.html'
+                },
+                {
+                id: 'stockholm',
+                name: 'Stockholm, Sweden',
+                description: 'Nordic elegance on fourteen islands.',
+                region: 'europe',
+                climate: 'continental',
+                population: '975k residents',
+                emoji: '🌊',
+                color: 'linear-gradient(135deg, #3498db, #2980b9)',
+                file: 'cities/Stockholm.html'
+                },
+                {
+                id: 'vienna',
+                name: 'Vienna, Austria',
+                description: 'Imperial grandeur, musical mastery.',
+                region: 'europe',
+                climate: 'continental',
+                population: '1.9M residents',
+                emoji: '🎼',
+                color: 'linear-gradient(135deg, #8e44ad, #732d91)',
+                file: 'cities/Vienna.html'
+                },// 17 Additional Cities - HTML Configuration Format (Balanced Dark Shades)
+
+                {
+                id: 'malmo',
+                name: 'Malmö, Sweden',
+                description: 'Bridge city connecting cultures.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '347k residents',
+                emoji: '🌉',
+                color: 'linear-gradient(135deg, #4a6fa5, #2d4a73)',
+                file: 'cities/malmo.html'
+                },
+                {
+                id: 'helsinki',
+                name: 'Helsinki, Finland',
+                description: 'Nordic cool, design hot.',
+                region: 'europe',
+                climate: 'continental',
+                population: '658k residents',
+                emoji: '🦌',
+                color: 'linear-gradient(135deg, #5c7a8b, #3e5a6b)',
+                file: 'cities/helsinki.html'
+                },
+                {
+                id: 'tallinn',
+                name: 'Tallinn, Estonia',
+                description: 'Medieval charm meets digital dreams.',
+                region: 'europe',
+                climate: 'continental',
+                population: '435k residents',
+                emoji: '🏰',
+                color: 'linear-gradient(135deg, #8b6f3e, #6b5530)',
+                file: 'cities/tallinn.html'
+                },
+                {
+                id: 'newyork',
+                name: 'New York, USA',
+                description: 'The city that never sleeps.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '8.3M residents',
+                emoji: '🗽',
+                color: 'linear-gradient(135deg, #3d5a75, #2a4259)',
+                file: 'cities/newyork.html'
+                },
+                {
+                id: 'houston',
+                name: 'Houston, USA',
+                description: 'Space city, energy capital.',
+                region: 'north america',
+                climate: 'humid subtropical',
+                population: '2.3M residents',
+                emoji: '🚀',
+                color: 'linear-gradient(135deg, #8b5a3c, #6b4430)',
+                file: 'cities/houston.html'
+                },
+                {
+                id: 'boston',
+                name: 'Boston, USA',
+                description: 'Revolutionary history, academic excellence.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '695k residents',
+                emoji: '🎓',
+                color: 'linear-gradient(135deg, #4a5d7a, #354554)',
+                file: 'cities/boston.html'
+                },
+                {
+                id: 'melbourne',
+                name: 'Melbourne, Australia',
+                description: 'Cultural capital, coffee obsessed.',
+                region: 'oceania',
+                climate: 'oceanic',
+                population: '5.2M residents',
+                emoji: '☕',
+                color: 'linear-gradient(135deg, #6b4c57, #533a45)',
+                file: 'cities/melbourne.html'
+                },
+                {
+                id: 'sydney',
+                name: 'Sydney, Australia',
+                description: 'Harbor jewel, beach paradise.',
+                region: 'oceania',
+                climate: 'humid subtropical',
+                population: '5.4M residents',
+                emoji: '🌊',
+                color: 'linear-gradient(135deg, #2e5984, #1e3f5f)',
+                file: 'cities/sydney.html'
+                },
+                {
+                id: 'mysuru',
+                name: 'Mysuru, India',
+                description: 'Palace city, yoga capital.',
+                region: 'asia',
+                climate: 'tropical savanna',
+                population: '1.0M residents',
+                emoji: '🕌',
+                color: 'linear-gradient(135deg, #a6622f, #7d4a23)',
+                file: 'cities/mysuru.html'
+                },
+                {
+                id: 'shimla',
+                name: 'Shimla, India',
+                description: 'Hill station queen, colonial charm.',
+                region: 'asia',
+                climate: 'subtropical highland',
+                population: '172k residents',
+                emoji: '🏔️',
+                color: 'linear-gradient(135deg, #4a7c5d, #356147)',
+                file: 'cities/shimla.html'
+                },
+                {
+                id: 'kyoto',
+                name: 'Kyoto, Japan',
+                description: 'Ancient temples, timeless traditions.',
+                region: 'asia',
+                climate: 'humid subtropical',
+                population: '1.5M residents',
+                emoji: '⛩️',
+                color: 'linear-gradient(135deg, #8b4c4c, #6b3a3a)',
+                file: 'cities/kyoto.html'
+                },
+                {
+                id: 'sapporo',
+                name: 'Sapporo, Japan',
+                description: 'Snow festival, beer heritage.',
+                region: 'asia',
+                climate: 'humid continental',
+                population: '1.9M residents',
+                emoji: '❄️',
+                color: 'linear-gradient(135deg, #546e7a, #37474f)',
+                file: 'cities/sapporo.html'
+                },
+                {
+                id: 'kualalumpur',
+                name: 'Kuala Lumpur, Malaysia',
+                description: 'Twin towers, cultural fusion.',
+                region: 'asia',
+                climate: 'tropical rainforest',
+                population: '1.8M residents',
+                emoji: '🏙️',
+                color: 'linear-gradient(135deg, #455a64, #263238)',
+                file: 'cities/kualalumpur.html'
+                },
+                {
+                id: 'colombo',
+                name: 'Colombo, Sri Lanka',
+                description: 'Island gateway, spice heritage.',
+                region: 'asia',
+                climate: 'tropical monsoon',
+                population: '753k residents',
+                emoji: '🌴',
+                color: 'linear-gradient(135deg, #558b4b, #3e6b35)',
+                file: 'cities/colombo.html'
+                },
+                {
+                id: 'capetown',
+                name: 'Cape Town, South Africa',
+                description: 'Table Mountain majesty, rainbow nation.',
+                region: 'africa',
+                climate: 'mediterranean',
+                population: '4.6M residents',
+                emoji: '🏔️',
+                color: 'linear-gradient(135deg, #8b7355, #6b5942)',
+                file: 'cities/capetown.html'
+                },
+                {
+                id: 'jakarta',
+                name: 'Jakarta, Indonesia',
+                description: 'Megacity energy, archipelago gateway.',
+                region: 'asia',
+                climate: 'tropical monsoon',
+                population: '10.6M residents',
+                emoji: '🌆',
+                color: 'linear-gradient(135deg, #5d7e6b, #456354)',
+                file: 'cities/jakarta.html'
+                },
+                {
+                id: 'bali',
+                name: 'Bali, Indonesia',
+                description: 'Island paradise, spiritual sanctuary.',
+                region: 'asia',
+                climate: 'tropical monsoon',
+                population: '4.3M residents',
+                emoji: '🌺',
+                color: 'linear-gradient(135deg, #8b5a5a, #6b4444)',
+                file: 'cities/bali.html'
+                },// 13 More Cities - HTML Configuration Format (Balanced Dark Shades)
+
+                {
+                id: 'barcelona',
+                name: 'Barcelona, Spain',
+                description: 'Gaudí dreams, Mediterranean magic.',
+                region: 'europe',
+                climate: 'mediterranean',
+                population: '1.6M residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #8b4513, #654321)',
+                file: 'cities/barcelona.html'
+                },
+                {
+                id: 'frankfurt',
+                name: 'Frankfurt, Germany',
+                description: 'Financial powerhouse, skyline city.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '753k residents',
+                emoji: '🏦',
+                color: 'linear-gradient(135deg, #4a5568, #2d3748)',
+                file: 'cities/frankfurt.html'
+                },
+                {
+                id: 'cologne',
+                name: 'Cologne, Germany',
+                description: 'Gothic grandeur, cultural crossroads.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '1.1M residents',
+                emoji: '⛪',
+                color: 'linear-gradient(135deg, #5a4f7c, #403466)',
+                file: 'cities/cologne.html'
+                },
+                {
+                id: 'manila',
+                name: 'Manila, Philippines',
+                description: 'Pearl of the Orient, vibrant chaos.',
+                region: 'asia',
+                climate: 'tropical monsoon',
+                population: '1.8M residents',
+                emoji: '🌺',
+                color: 'linear-gradient(135deg, #7c4343, #5a2f2f)',
+                file: 'cities/manila.html'
+                },
+                {
+                id: 'taipei',
+                name: 'Taipei, Taiwan',
+                description: 'Night market nights, temple lights.',
+                region: 'asia',
+                climate: 'humid subtropical',
+                population: '2.6M residents',
+                emoji: '🏮',
+                color: 'linear-gradient(135deg, #8b2635, #5f1a23)',
+                file: 'cities/taipei.html'
+                },
+                {
+                id: 'seoul',
+                name: 'Seoul, South Korea',
+                description: 'K-pop capital, digital dynamo.',
+                region: 'asia',
+                climate: 'humid continental',
+                population: '9.7M residents',
+                emoji: '🎵',
+                color: 'linear-gradient(135deg, #4a4e69, #2f3349)',
+                file: 'cities/seoul.html'
+                },
+                {
+                id: 'lyon',
+                name: 'Lyon, France',
+                description: 'Gastronomic capital, silk heritage.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '518k residents',
+                emoji: '🍷',
+                color: 'linear-gradient(135deg, #7b3f4d, #5d2f3a)',
+                file: 'cities/lyon.html'
+                },
+                {
+                id: 'prague',
+                name: 'Prague, Czech Republic',
+                description: 'Bohemian rhapsody, castle city.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '1.3M residents',
+                emoji: '🏰',
+                color: 'linear-gradient(135deg, #6b5876, #4f4058)',
+                file: 'cities/prague.html'
+                },
+                {
+                id: 'manchester',
+                name: 'Manchester, UK',
+                description: 'Industrial heritage, music mecca.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '547k residents',
+                emoji: '🎸',
+                color: 'linear-gradient(135deg, #5a6b4a, #42503a)',
+                file: 'cities/manchester.html'
+                },
+                {
+                id: 'birmingham',
+                name: 'Birmingham, UK',
+                description: 'Workshop of the world, canal city.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '1.1M residents',
+                emoji: '🔧',
+                color: 'linear-gradient(135deg, #7a5c3f, #5c442f)',
+                file: 'cities/birmingham.html'
+                },
+                {
+                id: 'toronto',
+                name: 'Toronto, Canada',
+                description: 'Multicultural mosaic, CN Tower.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '2.9M residents',
+                emoji: '🗼',
+                color: 'linear-gradient(135deg, #4a6741, #355030)',
+                file: 'cities/toronto.html'
+                },
+                {
+                id: 'montreal',
+                name: 'Montreal, Canada',
+                description: 'French flair, festival city.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '1.8M residents',
+                emoji: '🎭',
+                color: 'linear-gradient(135deg, #6b4c75, #4f3858)',
+                file: 'cities/montreal.html'
+                },
+                {
+                id: 'vancouver',
+                name: 'Vancouver, Canada',
+                description: 'Mountains meet ocean, glass city.',
+                region: 'north america',
+                climate: 'oceanic',
+                population: '675k residents',
+                emoji: '🏔️',
+                color: 'linear-gradient(135deg, #3e5c6b, #2a404a)',
+                file: 'cities/vancouver.html'
+                },// 19 Final Cities - HTML Configuration Format (Balanced Dark Shades)
+
+                {
+                id: 'ghent',
+                name: 'Ghent, Belgium',
+                description: 'Medieval marvel, student spirit.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '265k residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #6b5d4f, #4d4237)',
+                file: 'cities/ghent.html'
+                },
+                {
+                id: 'denver',
+                name: 'Denver, USA',
+                description: 'Mile high city, mountain gateway.',
+                region: 'north america',
+                climate: 'semi-arid',
+                population: '715k residents',
+                emoji: '🏔️',
+                color: 'linear-gradient(135deg, #8b7355, #6b5942)',
+                file: 'cities/denver.html'
+                },
+                {
+                id: 'chicago',
+                name: 'Chicago, USA',
+                description: 'Windy city, architectural wonder.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '2.7M residents',
+                emoji: '🌬️',
+                color: 'linear-gradient(135deg, #4a5d6b, #344550)',
+                file: 'cities/chicago.html'
+                },
+                {
+                id: 'budapest',
+                name: 'Budapest, Hungary',
+                description: 'Danube jewel, thermal baths.',
+                region: 'europe',
+                climate: 'humid continental',
+                population: '1.7M residents',
+                emoji: '♨️',
+                color: 'linear-gradient(135deg, #8b4c39, #6b3a2a)',
+                file: 'cities/budapest.html'
+                },
+                {
+                id: 'bratislava',
+                name: 'Bratislava, Slovakia',
+                description: 'Compact capital, castle views.',
+                region: 'europe',
+                climate: 'humid continental',
+                population: '440k residents',
+                emoji: '🏰',
+                color: 'linear-gradient(135deg, #6b5876, #4f4058)',
+                file: 'cities/bratislava.html'
+                },
+                {
+                id: 'heidelberg',
+                name: 'Heidelberg, Germany',
+                description: 'Romantic ruins, student town.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '161k residents',
+                emoji: '🎓',
+                color: 'linear-gradient(135deg, #7a5c47, #5c4437)',
+                file: 'cities/heidelberg.html'
+                },
+                {
+                id: 'helsingborg',
+                name: 'Helsingborg, Sweden',
+                description: 'Gateway to Denmark, seaside charm.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '113k residents',
+                emoji: '⛵',
+                color: 'linear-gradient(135deg, #4a6b7a, #355260)',
+                file: 'cities/helsingborg.html'
+                },
+                {
+                id: 'honolulu',
+                name: 'Honolulu, USA',
+                description: 'Pacific paradise, aloha spirit.',
+                region: 'north america',
+                climate: 'tropical savanna',
+                population: '350k residents',
+                emoji: '🌺',
+                color: 'linear-gradient(135deg, #8b5a2b, #6b441f)',
+                file: 'cities/honolulu.html'
+                },
+                {
+                id: 'johannesburg',
+                name: 'Johannesburg, South Africa',
+                description: 'Gold rush legacy, vibrant energy.',
+                region: 'africa',
+                climate: 'subtropical highland',
+                population: '5.6M residents',
+                emoji: '💎',
+                color: 'linear-gradient(135deg, #8b6914, #6b5010)',
+                file: 'cities/johannesburg.html'
+                },
+                {
+                id: 'ljubljana',
+                name: 'Ljubljana, Slovenia',
+                description: 'Dragon city, green capital.',
+                region: 'europe',
+                climate: 'humid continental',
+                population: '295k residents',
+                emoji: '🐉',
+                color: 'linear-gradient(135deg, #5a7c4a, #426038)',
+                file: 'cities/ljubljana.html'
+                },
+                {
+                id: 'losangeles',
+                name: 'Los Angeles, USA',
+                description: 'City of angels, Hollywood dreams.',
+                region: 'north america',
+                climate: 'mediterranean',
+                population: '4.0M residents',
+                emoji: '🎬',
+                color: 'linear-gradient(135deg, #8b3a62, #6b2c4a)',
+                file: 'cities/losangeles.html'
+                },
+                {
+                id: 'phuket',
+                name: 'Phuket, Thailand',
+                description: 'Island paradise, beach bliss.',
+                region: 'asia',
+                climate: 'tropical monsoon',
+                population: '416k residents',
+                emoji: '🏖️',
+                color: 'linear-gradient(135deg, #4a7c7c, #356060)',
+                file: 'cities/phuket.html'
+                },
+                {
+                id: 'quebeccity',
+                name: 'Quebec City, Canada',
+                description: 'French fortress, cobblestone charm.',
+                region: 'north america',
+                climate: 'humid continental',
+                population: '540k residents',
+                emoji: '🏰',
+                color: 'linear-gradient(135deg, #7b4f75, #5d3b58)',
+                file: 'cities/quebeccity.html'
+                },
+                {
+                id: 'quibdo',
+                name: 'Quibdó, Colombia',
+                description: 'Rainforest rhythm, Afro-Colombian soul.',
+                region: 'south america',
+                climate: 'tropical rainforest',
+                population: '116k residents',
+                emoji: '🌿',
+                color: 'linear-gradient(135deg, #4a6b4a, #355035)',
+                file: 'cities/quibdo.html'
+                },
+                {
+                id: 'riodejaneiro',
+                name: 'Rio de Janeiro, Brazil',
+                description: 'Carnival city, beach culture.',
+                region: 'south america',
+                climate: 'tropical savanna',
+                population: '6.7M residents',
+                emoji: '🎉',
+                color: 'linear-gradient(135deg, #8b4169, #6b3250)',
+                file: 'cities/riodejaneiro.html'
+                },
+                {
+                id: 'shanghai',
+                name: 'Shanghai, China',
+                description: 'Future skyline, ancient roots.',
+                region: 'asia',
+                climate: 'humid subtropical',
+                population: '24.3M residents',
+                emoji: '🏙️',
+                color: 'linear-gradient(135deg, #5a4f6b, #423a50)',
+                file: 'cities/shanghai.html'
+                },
+                {
+                id: 'strasbourg',
+                name: 'Strasbourg, France',
+                description: 'European crossroads, half-timbered beauty.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '285k residents',
+                emoji: '🏛️',
+                color: 'linear-gradient(135deg, #7a6b47, #5c5237)',
+                file: 'cities/strasbourg.html'
+                },
+                {
+                id: 'zagreb',
+                name: 'Zagreb, Croatia',
+                description: 'Habsburg heritage, café culture.',
+                region: 'europe',
+                climate: 'humid continental',
+                population: '790k residents',
+                emoji: '☕',
+                color: 'linear-gradient(135deg, #6b4f39, #533d2a)',
+                file: 'cities/zagreb.html'
+                },
+                {
+                id: 'zurich',
+                name: 'Zurich, Switzerland',
+                description: 'Banking hub, Alpine views.',
+                region: 'europe',
+                climate: 'oceanic',
+                population: '435k residents',
+                emoji: '🏦',
+                color: 'linear-gradient(135deg, #5d6b7a, #455260)',
+                file: 'cities/zurich.html'
+                }
+        ];
+        
+        // Rain Animation
+        function createRain() {
+            const rain = document.getElementById('rain');
+            const numberOfDrops = 100;
+            
+            for (let i = 0; i < numberOfDrops; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'drop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                rain.appendChild(drop);
+            }
+        }
+        
+        // Populate city grid
+        function populateCityGrid() {
+            const cityGrid = document.getElementById('cityGrid');
+            
+            cities.forEach(city => {
+                const cityCard = document.createElement('div');
+                cityCard.className = 'city-card';
+                cityCard.setAttribute('data-region', city.region);
+                cityCard.onclick = () => showCityGuide(city.id);
+                
+                cityCard.innerHTML = `
+                    <div class="city-card-header" style="background: ${city.color};">
+                        <span>${city.emoji} ${city.name.split(',')[0]}</span>
+                    </div>
+                    <div class="city-card-content">
+                        <h3>${city.name}</h3>
+                        <p>${city.description}</p>
+                        <div class="city-meta">
+                            <span class="city-climate">${city.climate}</span>
+                            <span>${city.population}</span>
+                        </div>
+                    </div>
+                `;
+                
+                cityGrid.appendChild(cityCard);
+            });
+        }
+        
+        // City Guide Navigation
+        async function showCityGuide(cityId) {
+            const city = cities.find(c => c.id === cityId);
+            if (!city) return;
+            
+            // Hide main website
+            document.getElementById('main-website').style.display = 'none';
+            document.getElementById('city-guide-frame').style.display = 'block';
+            
+            // Show loading
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('city-guide-content').innerHTML = '';
+            document.getElementById('guide-title').textContent = city.name;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                try {
+                    // First try to fetch from file (for production with web server)
+                    fetch(city.file)
+                        .then(response => {
+                            if (!response.ok) throw new Error('File not found');
+                            return response.text();
+                        })
+                        .then(htmlContent => {
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('city-guide-content').innerHTML = htmlContent;
+                        })
+                        .catch(() => {
+                            // Fallback to embedded content (for direct file opening)
+                            const content = cityContent[cityId] || `
+                                <div style="text-align: center; padding: 40px; background: #fed7d7; border-radius: 15px; color: #c53030;">
+                                    <h2>🚧 City Guide Not Available</h2>
+                                    <p>Content for ${city.name} is not yet available.</p>
+                                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; color: #4a5568;">
+                                        <p><strong>To see your custom content:</strong></p>
+                                        <ol style="text-align: left; margin-top: 10px;">
+                                            <li>Run a local web server (see instructions above)</li>
+                                            <li>Place your city HTML files in the cities/ folder</li>
+                                            <li>Access via http://localhost instead of file://</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('city-guide-content').innerHTML = content;
+                        });
+                        
+                } catch (error) {
+                    // Show embedded content as fallback
+                    const content = cityContent[cityId] || `<div style="text-align: center; padding: 40px;"><h2>Content not available</h2></div>`;
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    document.getElementById('city-guide-content').innerHTML = content;
+                }
+            }, 800); // Small delay to show loading animation
+        }
+        
+        function hideCityGuide() {
+            document.getElementById('city-guide-frame').style.display = 'none';
+            document.getElementById('main-website').style.display = 'block';
+            document.querySelector('#city-guides').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Search and Filter Functions
+        function filterCities() {
+            const searchTerm = document.getElementById('citySearch').value.toLowerCase();
+            const cityCards = document.querySelectorAll('.city-card');
+            
+            cityCards.forEach(card => {
+                const cityName = card.querySelector('h3').textContent.toLowerCase();
+                const cityDescription = card.querySelector('p').textContent.toLowerCase();
+                
+                if (cityName.includes(searchTerm) || cityDescription.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function filterByRegion(region) {
+            const cityCards = document.querySelectorAll('.city-card');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cities
+            cityCards.forEach(card => {
+                if (region === 'all' || card.dataset.region.includes(region)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Clear search box
+            document.getElementById('citySearch').value = '';
+        }
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+        
+        // Initialize
+        createRain();
+        populateCityGrid();
+    </script>
+</body>
+</html>
