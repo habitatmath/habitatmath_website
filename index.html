@@ -1678,7 +1678,7 @@
                 
                 // Add click handler with debugging
                 cityCard.onclick = function() {
-                    const targetUrl = `cities/${city.id}.html`;
+                    const targetUrl = city.file;
                     console.log(`Clicking on ${city.name}, navigating to: ${targetUrl}`);
                     window.location.href = targetUrl;
                 };
