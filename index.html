@@ -1678,17 +1678,21 @@
                 
                 // Add click handler with debugging
                 // GitHub Pages compatible navigation
-                    cityCard.onclick = function(e) {
+                cityCard.onclick = function(e) {
                     e.preventDefault();
                     
-                    const targetUrl = city.file; // Uses YOUR exact file path
+                    const targetUrl = city.file;
                     console.log(`🎯 Clicking on ${city.name}`);
                     console.log(`📁 Target URL: ${targetUrl}`);
                     console.log(`🌐 Current location: ${window.location.href}`);
                     
-                    // Simply navigate to your specified path - no problematic fallback!
+                    // Add this extra debugging
+                    console.log(`🔍 City ID: ${city.id}`);
+                    console.log(`🔍 Expected file: ${city.file}`);
+                    
                     window.location.href = targetUrl;
                 };
+
                 
                 // Make it more clickable
                 cityCard.style.cursor = 'pointer';
