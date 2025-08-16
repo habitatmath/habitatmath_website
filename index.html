@@ -12,14 +12,14 @@
         }
         
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Garamond', sans-serif;
             line-height: 1.6;
             color: #2d3748;
             overflow-x: hidden;
         }
         
-        /* Rain Animation */
-        .rain {
+        /* Enhanced Snow Animation */
+        .snow {
             position: fixed;
             top: 0;
             left: 0;
@@ -29,26 +29,43 @@
             z-index: 1;
         }
         
-        .drop {
+        .snowflake {
             position: absolute;
-            background: linear-gradient(transparent, rgba(255,255,255,0.6), transparent);
-            width: 2px;
-            height: 120px;
+            color: rgba(255, 255, 255, 0.6);
+            user-select: none;
+            pointer-events: none;
+            font-size: 1em;
             animation: fall linear infinite;
         }
         
         @keyframes fall {
-            to {
-                transform: translateY(100vh);
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
         
-        /* Header */
+        /* Enhanced Header with Custom Hero Image */
         header {
             position: relative;
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="cityGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:%23374151;stop-opacity:1" /><stop offset="100%" style="stop-color:%23111827;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="800" fill="url(%23cityGrad)"/><g fill="%23374151" opacity="0.8"><rect x="100" y="300" width="80" height="500"/><rect x="200" y="250" width="60" height="550"/><rect x="280" y="350" width="70" height="450"/><rect x="370" y="200" width="90" height="600"/><rect x="480" y="320" width="75" height="480"/><rect x="570" y="180" width="85" height="620"/><rect x="670" y="280" width="65" height="520"/><rect x="750" y="150" width="95" height="650"/><rect x="860" y="260" width="70" height="540"/><rect x="950" y="220" width="80" height="580"/></g><g fill="%23FEF3C7" opacity="0.7"><rect x="120" y="320" width="8" height="12"/><rect x="135" y="350" width="8" height="12"/><rect x="150" y="380" width="8" height="12"/><rect x="220" y="280" width="6" height="10"/><rect x="235" y="310" width="6" height="10"/><rect x="300" y="370" width="7" height="11"/><rect x="315" y="400" width="7" height="11"/><rect x="390" y="240" width="9" height="13"/><rect x="410" y="280" width="9" height="13"/><rect x="500" y="350" width="8" height="12"/><rect x="590" y="220" width="8" height="12"/><rect x="605" y="250" width="8" height="12"/><rect x="690" y="310" width="6" height="10"/><rect x="770" y="190" width="9" height="13"/><rect x="790" y="230" width="9" height="13"/><rect x="880" y="290" width="7" height="11"/><rect x="970" y="250" width="8" height="12"/></g></svg>') center/cover;
+            height: 85vh;
+            /* 🎨 REPLACE 'hero-bg.jpg' WITH YOUR AI-GENERATED IMAGE FILE NAME */
+            background: 
+                linear-gradient(
+                    135deg, /* Changed back to 135deg - light top-left, dark bottom-right */
+                    rgba(255, 255, 255, 0.6) 0%,    /* Bright white area for logo (TOP-LEFT) */
+                    rgba(248, 250, 252, 0.4) 25%,   /* Light transition */
+                    rgba(203, 213, 224, 0.3) 50%,   /* Medium grey middle */
+                    rgba(74, 85, 104, 0.4) 75%,     /* Dark transition */
+                    rgba(45, 55, 72, 0.7) 100%      /* Blunt dark grey corner (BOTTOM-RIGHT) */
+                ),
+                url('hero-bg.jpg') center/cover no-repeat;
+            /* 📝 Fallback background for when image is loading */
+            background-color: #f8fafc;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -57,16 +74,185 @@
             color: white;
             position: relative;
             z-index: 2;
+            overflow: hidden;
         }
         
+        /* Additional overlay for even more contrast */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg, /* Same direction - light top-left, dark bottom-right */
+                rgba(255, 255, 255, 0.3) 0%,    /* Extra brightness for logo area (TOP-LEFT) */
+                rgba(255, 255, 255, 0.1) 30%,   /* Light fade */
+                transparent 50%,                 /* Clear middle */
+                rgba(0, 0, 0, 0.2) 70%,         /* Darkening */
+                rgba(45, 55, 72, 0.4) 100%      /* Strong blunt corner (BOTTOM-RIGHT) */
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* Ensure content appears above overlay */
+        header > * {
+            position: relative;
+            z-index: 3;
+        }
+        
+        /* Enhanced Navigation with Logo */
         nav {
             position: absolute;
             top: 0;
             width: 100%;
-            padding: 20px 0;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             z-index: 10;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            width: 55px;
+            height: 35px;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            overflow: hidden;
+        }
+        
+        /* Train Wagon Design */
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 18px;
+            background: white;
+            border-radius: 6px;
+            top: 6px;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+            bottom: 4px;
+        }
+        
+        /* Colorful windows for the wagon */
+        .logo .window1,
+        .logo .window2,
+        .logo .window3,
+        .logo .window4 {
+            position: absolute;
+            width: 6px;
+            height: 8px;
+            border-radius: 2px;
+            top: 8px;
+        }
+        
+        .logo .window1 { left: 8px; background: #3182ce; }
+        .logo .window2 { left: 17px; background: #4caf50; }
+        .logo .window3 { left: 26px; background: #ff9800; }
+        .logo .window4 { left: 35px; background: #e91e63; }
+        
+        /* Wheels */
+        .logo .wheel1,
+        .logo .wheel2 {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #2c5aa0;
+            border-radius: 50%;
+            bottom: 6px;
+        }
+        
+        .logo .wheel1 { left: 12px; }
+        .logo .wheel2 { left: 37px; }
+        
+        .logo-text {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Mixed case styling for better readability */
+        .logo-text .letter-h {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            color: #fef3c7;
+            font-weight: 800;
+            margin-right: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-text .letter-a1,
+        .logo-text .letter-b,
+        .logo-text .letter-i,
+        .logo-text .letter-t1,
+        .logo-text .letter-a2,
+        .logo-text .letter-t2 {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-text .space {
+            margin: 0 6px;
+        }
+        
+        .logo-text .letter-m {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            color: #fef3c7;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-text .letter-a3,
+        .logo-text .letter-t3,
+        .logo-text .letter-h2 {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         
         nav ul {
@@ -74,62 +260,290 @@
             display: flex;
             justify-content: center;
             gap: 40px;
+            margin: 0;
         }
         
         nav a {
-            color: white;
+            color: #424242;
             text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             transition: all 0.3s ease;
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 20px;
+            position: relative;
+            letter-spacing: 0.3px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         
         nav a:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.4);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            color: #212121;
         }
         
+        /* Hero Content - Positioned in Sky Area */
         .hero-content {
-            max-width: 800px;
-            padding: 0 20px;
+            max-width: 700px;
+            padding: 0 30px;
             z-index: 5;
-        }
-        
-        .hero-content h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            letter-spacing: -1px;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
         }
         
         .hero-content p {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            opacity: 0.9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 35px;
+            color: #2d3748;
+            line-height: 1.4;
+            font-weight: 600;
+            opacity: 1;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 
+                0 2px 6px rgba(255, 255, 255, 0.9),
+                0 3px 8px rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.3px;
         }
         
+        /* Enhanced CTA Button */
         .cta-button {
             display: inline-block;
-            background: linear-gradient(45deg, #3182ce, #2c5aa0);
+            background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 50%, #2a4d8a 100%);
             color: white;
-            padding: 15px 35px;
+            padding: 16px 36px;
             text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.3);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px rgba(49, 130, 206, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
         }
         
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(49, 130, 206, 0.4);
+            box-shadow: 
+                0 12px 35px rgba(49, 130, 206, 0.5),
+                0 8px 25px rgba(0, 0, 0, 0.25);
         }
         
-        /* Main Content */
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 0 20px;
+            }
+            
+            nav ul {
+                gap: 25px;
+            }
+            
+            .logo-section {
+                gap: 3px;
+                transform: scale(0.9);
+            }
+            
+            .logo {
+                width: 45px;
+                height: 30px;
+            }
+            
+            .logo-text-habitat,
+            .logo-text-math {
+                font-size: 1.1rem;
+                padding: 6px 10px;
+            }
+            
+            .hero-content {
+                top: 30%;
+                padding: 0 20px;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+                margin-bottom: 25px;
+            }
+            
+            .cta-button {
+                padding: 14px 28px;
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .logo-section {
+                gap: 2px;
+                transform: scale(0.8);
+            }
+            
+            .logo-text-habitat,
+            .logo-text-math {
+                font-size: 1rem;
+                padding: 5px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Snow Effect -->
+    <div class="snow" id="snow"></div>
+    
+    <!-- Enhanced Header -->
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo-section">
+                    <div class="logo">
+                        <div class="window1"></div>
+                        <div class="window2"></div>
+                        <div class="window3"></div>
+                        <div class="window4"></div>
+                        <div class="wheel1"></div>
+                        <div class="wheel2"></div>
+                    </div>
+                    <div class="logo-text new-style-v2" style="color: #3182ce !important; background: none !important; background-color: transparent !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; font-family: 'Fira Sans', sans-serif !important; font-weight: 300 !important; font-style: italic !important; font-size: 1.5rem !important; letter-spacing: 1px !important; text-shadow: 0 1px 3px rgba(49, 130, 206, 0.2) !important; transition: all 0.3s ease !important;">HabitatMath</div>
+                </div>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#city-guides">City Guides</a></li>
+                    <li><a href="#travel-tips">Travel Tips</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="hero-content">
+            <p>Your shortcut to understanding places — fun, fast and factual!</p>
+            <a href="#city-guides" class="cta-button">Explore Cities</a>
+        </div>
+    </header>
+
+    <script>
+        // Enhanced Snow Animation
+        function createSnow() {
+            const snow = document.getElementById('snow');
+            const snowflakes = ['❄', '❅', '❆', '✦', '✧'];
+            const numberOfFlakes = 30;
+            
+            for (let i = 0; i < numberOfFlakes; i++) {
+                const flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                flake.style.left = Math.random() * 100 + '%';
+                flake.style.fontSize = (Math.random() * 1.2 + 0.6) + 'em';
+                flake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                flake.style.animationDelay = Math.random() * 10 + 's';
+                flake.style.opacity = Math.random() * 0.4 + 0.3;
+                snow.appendChild(flake);
+            }
+        }
+        
+        // Initialize
+        createSnow();
+    </script>
+    
+    <!-- PART 1 ENDS HERE - CONTINUE WITH PART 2 FOR MAIN CONTENT -->
+<!-- PART 2 STARTS HERE - MAIN CONTENT SECTIONS -->
+    
+    <!-- Main Content -->
+    <main>
+        <!-- Welcome Section -->
+        <section class="welcome-section" id="about">
+            <div class="welcome-content">
+                <h2>Welcome to Habitat Math</h2>
+                <p>We will explain you the places through numbers and fun facts in less time. Come here for a quick glance and a clean impression of the place you like to know.</p>
+                
+                <p>Whether you're planning a weekend getaway, considering a move abroad, or simply satisfying your wanderlust from your armchair, we're here to be your data-driven, slightly crispy, but always reliable quick-look guide on the journey.</p>
+
+                <p>And guess what.. there is a lot more to come in the future, stay tuned!! </p>
+            </div>
+        </section>
+        
+        <!-- City Guides Section -->
+        <section class="city-guides" id="city-guides">
+            <div class="welcome-content">
+                <h2>Featured City Guides</h2>
+                <p>Explore our curated collection of 50+ city guides, each packed with essential metrics, local insights, and practical wisdom for informed travelers.</p>
+            </div>
+            
+            <!-- Search and Filter Controls -->
+            <div class="city-controls">
+                <input type="text" class="search-box" placeholder="Search cities..." id="citySearch" onkeyup="filterCities()">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByRegion('all')">All Regions</button>
+                    <button class="filter-btn" onclick="filterByRegion('europe')">Europe</button>
+                    <button class="filter-btn" onclick="filterByRegion('asia')">Asia</button>
+                    <button class="filter-btn" onclick="filterByRegion('arctic')">Arctic</button>
+                    <button class="filter-btn" onclick="filterByRegion('mediterranean')">Mediterranean</button>
+                </div>
+            </div>
+            
+            <div class="city-grid" id="cityGrid">
+                <!-- City cards will be populated by JavaScript from cities array -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; color: #718096;">
+                <p>More cities coming soon! We're continuously adding new destinations to help you explore the world.</p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- City Guide Frame -->
+    <div id="city-guide-frame" class="city-guide-frame">
+        <div class="guide-header">
+            <div class="guide-nav">
+                <button class="back-button" onclick="hideCityGuide()">← Back to City Guides</button>
+                <div class="guide-title" id="guide-title">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="loading-spinner" id="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading city guide...</p>
+        </div>
+        
+        <div class="city-guide-content" id="city-guide-content">
+            <!-- City guide content will be loaded here -->
+        </div>
+    </div>
+
+    <style>
+        /* Main Content Styles */
         main {
             position: relative;
             z-index: 3;
@@ -379,29 +793,8 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Footer */
-        footer {
-            background: #2d3748;
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
-        /* Responsive */
+        /* Responsive Design for Main Content */
         @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-content p {
-                font-size: 1.1rem;
-            }
-            
             .city-grid {
                 grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
                 gap: 15px;
@@ -439,127 +832,11 @@
             }
         }
     </style>
-    <!-- Matomo Tag Manager -->
-<script>
-  var _mtm = window._mtm = window._mtm || [];
-  _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-  (function() {
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src='https://cdn.matomo.cloud/habitatmath.matomo.cloud/container_YXg1dSxP.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Tag Manager -->
-</head>
-<body>
-    <!-- Rain Effect -->
-    <div class="rain" id="rain"></div>
-    
-    <!-- Main Website -->
-    <div id="main-website">
-        <!-- Header -->
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#city-guides">City Guides</a></li>
-                    <li><a href="#travel-tips">Travel Tips</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-            
-            <div class="hero-content">
-                <h1>Habitat Math</h1>
-                <p>Your shortcut to understanding places — fast, fun, and factual..</p>
-                <a href="#city-guides" class="cta-button">Explore Cities</a>
-            </div>
-        </header>
-        
-        <!-- Main Content -->
-        <main>
-            <!-- Welcome Section -->
-            <section class="welcome-section" id="about">
-                <div class="welcome-content">
-                    <h2>Welcome to Habitat Math</h2>
-                    <p>We will expalin you the places through numbers and fun facts in less time. Come here for a quick glance and a clean impression of the place you like to know.</p>
-                    
-                    <p>Whether you're planning a weekend getaway, considering a move abroad, or simply satisfying your wanderlust from your armchair, we're here to be your data-driven, slightly crispy, but always reliable quick-look guide on the journey.</p>
 
-                    <p>And guess what.. there is a lot more to come in the future, stay tuned!! </p>
-                </div>
-            </section>
-            
-            <!-- City Guides Section -->
-            <section class="city-guides" id="city-guides">
-                <div class="welcome-content">
-                    <h2>Featured City Guides</h2>
-                    <p>Explore our curated collection of 50+ city guides, each packed with essential metrics, local insights, and practical wisdom for informed travelers.</p>
-                </div>
-                
-                <!-- Search and Filter Controls -->
-                <div class="city-controls">
-                    <input type="text" class="search-box" placeholder="Search cities..." id="citySearch" onkeyup="filterCities()">
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" onclick="filterByRegion('all')">All Regions</button>
-                        <button class="filter-btn" onclick="filterByRegion('europe')">Europe</button>
-                        <button class="filter-btn" onclick="filterByRegion('asia')">Asia</button>
-                        <button class="filter-btn" onclick="filterByRegion('arctic')">Arctic</button>
-                        <button class="filter-btn" onclick="filterByRegion('mediterranean')">Mediterranean</button>
-                    </div>
-                </div>
-                
-                <div class="city-grid" id="cityGrid">
-                    <!-- City cards will be populated by JavaScript from cities.json -->
-                </div>
-                
-                <div style="text-align: center; margin-top: 40px; color: #718096;">
-                    <p>More cities coming soon! We're continuously adding new destinations to help you explore the world.</p>
-                </div>
-            </section>
-        </main>
-        
-        <!-- Footer -->
-        <footer id="contact">
-            <h3>Habitat Math</h3>
-            <p>Your shortcut to understanding places — fast, fun, and factual.</p>
-            <p style="margin-top: 20px; opacity: 0.7;">© 2024 Voyager's Friend. All rights reserved.</p>
-        </footer>
-    </div>
-    
-    <!-- City Guide Frame -->
-    <div id="city-guide-frame" class="city-guide-frame">
-        <div class="guide-header">
-            <div class="guide-nav">
-                <button class="back-button" onclick="hideCityGuide()">← Back to City Guides</button>
-                <div class="guide-title" id="guide-title">Loading...</div>
-            </div>
-        </div>
-        
-        <div class="loading-spinner" id="loading-spinner">
-            <div class="spinner"></div>
-            <p>Loading city guide...</p>
-        </div>
-        
-        <div class="city-guide-content" id="city-guide-content">
-            <!-- City guide content will be loaded here -->
-        </div>
-    </div>
-    
     <script>
         // Cities data - in a real implementation, this would come from cities.json
         const cities = [
-            {
-                id: 'umea',
-                name: 'Umeå, Sweden',
-                description: 'Arctic intellect meets cultural fire in Sweden\'s northern powerhouse.',
-                region: 'arctic europe',
-                climate: 'Subarctic',
-                population: '130k residents',
-                emoji: '🏔️',
-                color: 'linear-gradient(135deg, #2d6e3e, #1a3a2a)',
-                file: 'cities/umea.html'
-            },
-            {
+        {
                 id: 'nice',
                 name: 'Nice, France',
                 description: 'Azure dreams meet alpine reality on the stunning Côte d\'Azur.',
@@ -703,15 +980,15 @@
                 file: 'cities/TheHague.html'
             },
             {
-                id: 'iceland',
+                id: 'reykjavik',
                 name: '🌋 Reykjavík, Iceland',
                 description: 'Geysers and northern lights',
                 region: 'europe',
                 climate: 'sub-arctic',
                 population: '131k residents',
-                emoji: '🏛️',
+                emoji: '🌋',
                 color: 'linear-gradient(135deg, #2d5a87, #1e3a5f)',
-                file: 'cities/TheHague.html'
+                file: 'cities/Reykjavik.html'
             },
             {
                 id: 'tokyo',
@@ -941,7 +1218,7 @@
                 region: 'asia',
                 climate: 'tropical savanna',
                 population: '1.0M residents',
-                emoji: '🕌',
+                emoji: '🏛️',
                 color: 'linear-gradient(135deg, #a6622f, #7d4a23)',
                 file: 'cities/mysuru.html'
                 },
@@ -1376,43 +1653,38 @@
                 color: 'linear-gradient(135deg, #6b4f39, #533d2a)',
                 file: 'cities/zagreb.html'
                 },
-                {
-                id: 'zurich',
-                name: 'Zurich, Switzerland',
-                description: 'Banking hub, Alpine views.',
-                region: 'europe',
-                climate: 'oceanic',
-                population: '435k residents',
-                emoji: '🏦',
-                color: 'linear-gradient(135deg, #5d6b7a, #455260)',
-                file: 'cities/zurich.html'
-                }
-        ];
-        
-        // Rain Animation
-        function createRain() {
-            const rain = document.getElementById('rain');
-            const numberOfDrops = 100;
-            
-            for (let i = 0; i < numberOfDrops; i++) {
-                const drop = document.createElement('div');
-                drop.className = 'drop';
-                drop.style.left = Math.random() * 100 + '%';
-                drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                rain.appendChild(drop);
-            }
-        }
+    ]
         
         // Populate city grid
         function populateCityGrid() {
             const cityGrid = document.getElementById('cityGrid');
             
-            cities.forEach(city => {
+            if (!cityGrid) {
+                console.error('City grid element not found!');
+                return;
+            }
+            
+            // Clear existing cards first to prevent duplicates
+            cityGrid.innerHTML = '';
+            
+            console.log('Populating city grid with', cities.length, 'cities');
+            
+            cities.forEach((city, index) => {
+                console.log(`Creating card for: ${city.name} (${city.id})`);
+                
                 const cityCard = document.createElement('div');
                 cityCard.className = 'city-card';
                 cityCard.setAttribute('data-region', city.region);
-                cityCard.onclick = () => showCityGuide(city.id);
+                
+                // Add click handler with debugging
+                cityCard.onclick = function() {
+                    const targetUrl = `cities/${city.id}.html`;
+                    console.log(`Clicking on ${city.name}, navigating to: ${targetUrl}`);
+                    window.location.href = targetUrl;
+                };
+                
+                // Make it more clickable
+                cityCard.style.cursor = 'pointer';
                 
                 cityCard.innerHTML = `
                     <div class="city-card-header" style="background: ${city.color};">
@@ -1429,73 +1701,10 @@
                 `;
                 
                 cityGrid.appendChild(cityCard);
+                console.log(`Card added for ${city.name}`);
             });
-        }
-        
-        // City Guide Navigation
-        async function showCityGuide(cityId) {
-            const city = cities.find(c => c.id === cityId);
-            if (!city) return;
             
-            // Hide main website
-            document.getElementById('main-website').style.display = 'none';
-            document.getElementById('city-guide-frame').style.display = 'block';
-            
-            // Show loading
-            document.getElementById('loading-spinner').style.display = 'block';
-            document.getElementById('city-guide-content').innerHTML = '';
-            document.getElementById('guide-title').textContent = city.name;
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-            
-            // Simulate loading delay
-            setTimeout(() => {
-                try {
-                    // First try to fetch from file (for production with web server)
-                    fetch(city.file)
-                        .then(response => {
-                            if (!response.ok) throw new Error('File not found');
-                            return response.text();
-                        })
-                        .then(htmlContent => {
-                            document.getElementById('loading-spinner').style.display = 'none';
-                            document.getElementById('city-guide-content').innerHTML = htmlContent;
-                        })
-                        .catch(() => {
-                            // Fallback to embedded content (for direct file opening)
-                            const content = cityContent[cityId] || `
-                                <div style="text-align: center; padding: 40px; background: #fed7d7; border-radius: 15px; color: #c53030;">
-                                    <h2>🚧 City Guide Not Available</h2>
-                                    <p>Content for ${city.name} is not yet available.</p>
-                                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; color: #4a5568;">
-                                        <p><strong>To see your custom content:</strong></p>
-                                        <ol style="text-align: left; margin-top: 10px;">
-                                            <li>Run a local web server (see instructions above)</li>
-                                            <li>Place your city HTML files in the cities/ folder</li>
-                                            <li>Access via http://localhost instead of file://</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                            `;
-                            
-                            document.getElementById('loading-spinner').style.display = 'none';
-                            document.getElementById('city-guide-content').innerHTML = content;
-                        });
-                        
-                } catch (error) {
-                    // Show embedded content as fallback
-                    const content = cityContent[cityId] || `<div style="text-align: center; padding: 40px;"><h2>Content not available</h2></div>`;
-                    document.getElementById('loading-spinner').style.display = 'none';
-                    document.getElementById('city-guide-content').innerHTML = content;
-                }
-            }, 800); // Small delay to show loading animation
-        }
-        
-        function hideCityGuide() {
-            document.getElementById('city-guide-frame').style.display = 'none';
-            document.getElementById('main-website').style.display = 'block';
-            document.querySelector('#city-guides').scrollIntoView({ behavior: 'smooth' });
+            console.log('City grid population complete');
         }
         
         // Search and Filter Functions
@@ -1552,9 +1761,453 @@
             });
         });
         
-        // Initialize
-        createRain();
-        populateCityGrid();
+        // Initialize city grid when DOM is loaded - with duplicate prevention
+        let isGridPopulated = false; // Flag to prevent multiple initializations
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!isGridPopulated) {
+                populateCityGrid();
+                isGridPopulated = true;
+                
+                // Debug: Log when cities are populated
+                console.log('Cities populated:', cities.length, 'cities loaded');
+                
+                // Ensure click handlers are attached
+                setTimeout(() => {
+                    const cityCards = document.querySelectorAll('.city-card');
+                    console.log('City cards found:', cityCards.length);
+                    
+                    cityCards.forEach((card, index) => {
+                        console.log(`Card ${index + 1} click handler:`, card.onclick ? 'attached' : 'missing');
+                    });
+                }, 100);
+            } else {
+                console.log('City grid already populated, skipping...');
+            }
+        });
     </script>
+    
+    <!-- PART 2 ENDS HERE - CONTINUE WITH PART 3 FOR FOOTER AND FINAL SCRIPTS -->
+    
+    <!-- PART 3 STARTS HERE - FOOTER AND FINAL SCRIPTS -->
+<!-- PART 3 STARTS HERE - FOOTER AND FINAL SCRIPTS -->
+    
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-logo-section">
+                    <div class="footer-logo">
+                        <div class="logo">
+                            <div class="window1"></div>
+                            <div class="window2"></div>
+                            <div class="window3"></div>
+                            <div class="window4"></div>
+                            <div class="wheel1"></div>
+                            <div class="wheel2"></div>
+                        </div>
+                        <div class="logo-text" style="color: #4299e1 !important; background: none !important; background-color: transparent !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; font-family: 'Fira Sans', sans-serif !important; font-weight: 300 !important; font-style: italic !important; font-size: 1.3rem !important; letter-spacing: 1px !important; text-shadow: 0 1px 3px rgba(66, 153, 225, 0.2) !important; transition: all 0.3s ease !important;">HabitatMath</div>
+                    </div>
+                    <p class="footer-tagline">Your shortcut to understanding places — fast, fun, and factual.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a href="#city-guides">City Guides</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#travel-tips">Travel Tips</a></li>
+                            <li><a href="#home">Home</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Regions</h4>
+                        <ul>
+                            <li><a href="#" onclick="filterByRegion('europe')">Europe</a></li>
+                            <li><a href="#" onclick="filterByRegion('asia')">Asia</a></li>
+                            <li><a href="#" onclick="filterByRegion('arctic')">Arctic</a></li>
+                            <li><a href="#" onclick="filterByRegion('mediterranean')">Mediterranean</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="mailto:hello@habitatmath.com">Contact Us</a></li>
+                            <li><a href="#newsletter">Newsletter</a></li>
+                            <li><a href="#feedback">Feedback</a></li>
+                            <li><a href="#updates">Updates</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-divider"></div>
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 Habitat Math. All rights reserved.</p>
+                    <div class="footer-social">
+                        <span>Made with ❤️ for curious travelers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23ffffff;stop-opacity:0.03" /><stop offset="100%" style="stop-color:%23ffffff;stop-opacity:0.01" /></linearGradient></defs><rect width="1200" height="400" fill="url(%23footerGrad)"/><g opacity="0.1"><circle cx="100" cy="80" r="30" fill="%23ffffff"/><circle cx="300" cy="120" r="20" fill="%23ffffff"/><circle cx="500" cy="60" r="25" fill="%23ffffff"/><circle cx="700" cy="100" r="15" fill="%23ffffff"/><circle cx="900" cy="70" r="35" fill="%23ffffff"/><circle cx="1100" cy="90" r="20" fill="%23ffffff"/></g></svg>') center/cover;
+            pointer-events: none;
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 30px 30px 30px;
+        }
+        
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* Reuse logo styles with white color scheme */
+        footer .logo {
+            width: 55px;
+            height: 35px;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+            overflow: hidden;
+        }
+        
+        footer .logo::before {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 18px;
+            background: white;
+            border-radius: 6px;
+            top: 6px;
+        }
+        
+        footer .logo::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+            bottom: 4px;
+        }
+        
+        footer .logo .window1,
+        footer .logo .window2,
+        footer .logo .window3,
+        footer .logo .window4 {
+            position: absolute;
+            width: 6px;
+            height: 8px;
+            border-radius: 2px;
+            top: 8px;
+        }
+        
+        footer .logo .window1 { left: 8px; background: #4299e1; }
+        footer .logo .window2 { left: 17px; background: #48bb78; }
+        footer .logo .window3 { left: 26px; background: #ed8936; }
+        footer .logo .window4 { left: 35px; background: #ed64a6; }
+        
+        footer .logo .wheel1,
+        footer .logo .wheel2 {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #3182ce;
+            border-radius: 50%;
+            bottom: 6px;
+        }
+        
+        footer .logo .wheel1 { left: 12px; }
+        footer .logo .wheel2 { left: 37px; }
+        
+        footer .logo-text {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer .logo-text .letter-h {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            color: #fef3c7;
+            font-weight: 800;
+            margin-right: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer .logo-text .letter-a1,
+        footer .logo-text .letter-b,
+        footer .logo-text .letter-i,
+        footer .logo-text .letter-t1,
+        footer .logo-text .letter-a2,
+        footer .logo-text .letter-t2,
+        footer .logo-text .letter-a3,
+        footer .logo-text .letter-t3,
+        footer .logo-text .letter-h2 {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer .logo-text .space {
+            margin: 0 6px;
+        }
+        
+        footer .logo-text .letter-m {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            color: #fef3c7;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-tagline {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+        
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        
+        .footer-column h4 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column a {
+            color: #a0aec0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer-column a:hover {
+            color: #4299e1;
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+        }
+        
+        .footer-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin-bottom: 30px;
+        }
+        
+        .footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .footer-bottom-content p {
+            color: #718096;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .footer-social {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Footer */
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .footer-content {
+                padding: 40px 20px 20px 20px;
+            }
+            
+            footer .logo-text {
+                font-size: 1.2rem;
+            }
+            
+            footer .logo-text .letter-h {
+                font-size: 1.5rem;
+            }
+            
+            footer .logo-text .letter-m {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Complete JavaScript functionality
+        
+        // Enhanced smooth scrolling with offset for fixed navigation
+        function smoothScrollTo(targetId) {
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 80; // Account for nav height
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        // Enhanced navigation click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all functionality
+            populateCityGrid();
+            
+            // Enhanced navigation
+            document.querySelectorAll('nav a, footer a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Handle internal navigation
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        
+                        if (href === '#home') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            smoothScrollTo(href);
+                        }
+                    }
+                });
+            });
+            
+            // Add scroll effect to navigation
+            let lastScrollTop = 0;
+            const nav = document.querySelector('nav');
+            
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 100) {
+                    nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                    nav.style.backdropFilter = 'blur(10px)';
+                } else {
+                    nav.style.background = 'rgba(255, 255, 255, 0.12)';
+                    nav.style.backdropFilter = 'blur(20px)';
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+        });
+        
+        // Individual HTML file navigation (no overlay system needed)
+        
+        // Enhanced filter function that also scrolls to city guides
+        function filterByRegionAndScroll(region) {
+            // First scroll to city guides section
+            smoothScrollTo('#city-guides');
+            
+            // Then apply filter after a short delay
+            setTimeout(() => {
+                filterByRegion(region);
+            }, 500);
+        }
+        
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            console.log('🎉 Habitat Math website fully loaded!');
+            console.log('🗺️ Ready to navigate to individual city pages!');
+        });
+        
+        // Add some delightful console messages
+        console.log('🚂 Welcome to Habitat Math!');
+        console.log('🗺️ Your data-driven travel companion is ready!');
+    </script>
+
+    <!-- WEBSITE COMPLETE - ALL 3 PARTS INTEGRATED -->
 </body>
 </html>
